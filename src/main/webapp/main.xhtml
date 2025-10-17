@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Web-1</title>
+</h:head>
+<h:body>
+    <header>
+        <div id="main-header" class="main-header">
+            <div class="center-aligner">
+                <p>Веб-программирование 3 Вариант 26405</p>
+                <p>Выполнил Зенченков Павел Геннадьевич P3215 <a href="https://github.com/Nafine/web3">github</a></p>
+            </div>
+        </div>
+        <hr/>
+    </header>
+    <main>
+        <table class="main-table">
+            <colgroup>
+                <col style="width: 33%;"/>
+                <col style="width: 33%;"/>
+                <col style="width: 33%;"/>
+            </colgroup>
+            <tr>
+                <td>
+                    <canvas class="graph" id="graph" width="500" height="500"
+                            style="background-color: white; box-shadow: 2px 2px 2px 2px rgb(235,235,235); border-radius: 1em"/>
+                    <div class="input center-aligner" id="r">
+                        <div>
+                            <label><input type="radio" name="r" value="1" checked="checked"/> 1</label>
+                            <label><input type="radio" name="r" value="1.5"/> 1.5</label>
+                            <label><input type="radio" name="r" value="2"/> 2</label>
+                            <label><input type="radio" name="r" value="2.5"/> 2.5</label>
+                            <label><input type="radio" name="r" value="3"/> 3</label>
+                        </div>
+                    </div>
+                    <form class="center-aligner" method="get" action="main">
+                        <input type="hidden" name="mode" value="csv"/>
+                        <button id="download-points" type="submit" class="btn-submit">Export points</button>
+                    </form>
+                </td>
+                <td>
+                    <div class="center-aligner">
+                        <fieldset>
+                            <form id="form" autocomplete="off">
+                                <div class="input" id="x">
+                                    <div class="center-aligner">
+                                        <input type="text" id="x-input" name="x" pattern="^\s*-?\d+(\.(\d+)?)?$"
+                                               placeholder="X" maxlength="8" required="required"/>
+                                    </div>
+                                    <p class="err" id="x-err">X coord must be between -5 and 5!</p>
+                                </div>
+                                <div class="input" id="y">
+                                    <div class="center-aligner">
+                                        <input type="text" id="y-input" name="y" pattern="^\s*-?\d+(\.(\d+)?)?$"
+                                               placeholder="Y" maxlength="8" required="required"/>
+                                    </div>
+                                    <p class="err" id="y-err">Y coord must be between -5 and 3!</p>
+                                </div>
+                                <div class="center-aligner">
+                                    <button type="submit" id="submit" class="btn-submit" formmethod="get" disabled="disabled">
+                                        <svg role="img" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"
+                                             aria-label="forward">
+                                            <path d="M22.8011 14.75L14.2234 6.70971L16.0474 5L26.8695 15.1441C27.3732 15.6163 27.3732 16.3817 26.8695 16.8538L16.0474 26.998L14.2234 25.2883L22.7989 17.25H4.75V14.75H22.8011Z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    <div class="grid-aligner">
+                        <table id="requestTable">
+                            <thead>
+                            <tr>
+                                <th>X</th>
+                                <th>Y</th>
+                                <th>R</th>
+                                <th>Hit</th>
+                                <th>Request time</th>
+                                <th>Exec. time</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div id="pagination-controls">
+                            <div class="pagination-row">
+                                <button id="page-prev" class="btn-submit" type="button" disabled="disabled">
+                                    <svg role="img" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9.19891 17.25L17.7766 25.2903L15.9526 27L5.13052 16.8559C4.62684 16.3837 4.62684 15.6183 5.13052 15.1462L15.9526 5.002L17.7766 6.71167L9.20109 14.75H27.25V17.25H9.19891Z"/>
+                                    </svg>
+                                </button>
+                                <span id="page-info"/>
+                                <button id="page-next" class="btn-submit" type="button" disabled="disabled">
+                                    <svg role="img" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M22.8011 14.75L14.2234 6.70971L16.0474 5L26.8695 15.1441C27.3732 15.6163 27.3732 16.3817 26.8695 16.8538L16.0474 26.998L14.2234 25.2883L22.7989 17.25H4.75V14.75H22.8011Z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="pagination-row">
+                                <select id="page-size-select">
+                                    <option value="5">5</option>
+                                    <option value="10" selected="selected">10</option>
+                                    <option value="15">15</option>
+                                </select>
+                            </div>
+                            <div class="pagination-row">
+                                <button id="clear-points" class="btn-submit" type="button">Clear points</button>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </main>
+</h:body>
+</html>
