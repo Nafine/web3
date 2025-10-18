@@ -29,6 +29,12 @@
             <version>4.1.2</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>15.0.0</version>
+            <classifier>jakarta</classifier>
+        </dependency>
     </dependencies>
 
     <build>

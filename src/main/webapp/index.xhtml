@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html">
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="primefaces">
 <h:head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <h:outputStylesheet library="css" name="normalize.css"/>
+    <h:outputStylesheet library="css" name="style.css"/>
     <title>Web-1</title>
 </h:head>
 <h:body>
+    <header>
+        <div id="main-header" class="main-header">
+            <div class="center-aligner">
+                <p>Веб-программирование 3 Вариант 26405</p>
+                <p>Выполнил Зенченков Павел Геннадьевич P3215 <a href="https://github.com/Nafine/web3">github</a></p>
+            </div>
+        </div>
+        <hr/>
+    </header>
+    <div class="center-aligner">
+        <h:form>
+            <h:outputText id="serverTime" value="#{clockView.dateTime}" />
 
+            <p:poll interval="7"
+                    update="serverTime"
+                    listener="#{clockView.update}"
+                    autoStart="true" />
+        </h:form>
+    </div>
+    <div class="center-aligner">
+        <a href="main.xhtml">To main</a>
+    </div>
 </h:body>
-
 </html>
