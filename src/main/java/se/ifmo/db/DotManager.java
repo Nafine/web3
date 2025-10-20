@@ -3,7 +3,7 @@ package se.ifmo.db;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import se.ifmo.api.dots.Dot;
+import se.ifmo.api.Dot;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,14 +21,14 @@ public class DotManager {
 
     public void clear() {
         em.getTransaction().begin();
-        em.createQuery("DELETE FROM dot").executeUpdate();
+        em.createQuery("DELETE FROM Dot").executeUpdate();
         em.getTransaction().commit();
         dots.clear();
     }
 
     public List<Dot> get() {
         em.getTransaction().begin();
-        dots = em.createQuery("SELECT d FROM dot d").getResultList();
+        dots = em.createQuery("SELECT d FROM Dot d").getResultList();
         em.getTransaction().commit();
         return dots;
     }

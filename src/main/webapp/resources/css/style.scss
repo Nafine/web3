@@ -123,24 +123,25 @@ a {
 }
 
 .btn-submit {
-  background: white;
-  border-color: lightgray;
+  background: white !important;
+  border-color: lightgray !important;
+  color: black !important;
 
-  border-radius: $border-radius + 0.3em;
-  padding: 0.5em;
-  margin: 1em;
+  border-radius: $border-radius + 0.3em !important;
+  padding: 0.5em !important;
+  margin: 1em !important;
 
   min-width: 2.5em;
 
   transition: $transition;
 
   &:not(:disabled):hover {
-    background-color: $light-orange;
-    color: white;
+    background-color: $light-orange !important;
+    color: white !important;
   }
 
   &:disabled:hover {
-    cursor: not-allowed;
+    cursor: not-allowed !important;
   }
 }
 
@@ -214,8 +215,8 @@ main {
 }
 
 #requestTable {
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
   width: max-content;
   overflow-wrap: break-word;
 

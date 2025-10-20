@@ -73,7 +73,7 @@
                 <div id="pagination-controls" class="shadowed-box">
                     <h:form>
                         <div class="pagination-row">
-                            <p:commandButton icon="pi pi-arrow-left" styleClass="rounded-button"
+                            <p:commandButton icon="pi pi-arrow-left" styleClass="btn-submit"
                                              action="#{resultsBin.prevPage}"
                                              update="requestTable"
                                              process="@this"/>
@@ -82,7 +82,7 @@
                                              update="requestTable"
                                              process="@this"/>
 
-                            <p:commandButton icon="pi pi-arrow-right" styleClass="rounded-button"
+                            <p:commandButton icon="pi pi-arrow-right" styleClass="btn-submit"
                                              action="#{resultsBin.nextPage}"
                                              update="requestTable"
                                              process="@this"/>
@@ -112,12 +112,12 @@
                             <tbody>
                             <ui:repeat value="#{resultsBin.dots}" var="dot">
                                 <tr>
-                                    <td>#{dot.req().x()}</td>
-                                    <td>#{dot.req().y()}</td>
-                                    <td>#{dot.req().r()}</td>
-                                    <td>#{dot.res().hit() ? 'true' : 'false'}</td>
-                                    <td>#{dot.res().timestamp()}</td>
-                                    <td>#{dot.res().execTime()}</td>
+                                    <td>#{dot.getX()}</td>
+                                    <td>#{dot.getY()}</td>
+                                    <td>#{dot.getR()}</td>
+                                    <td>#{dot.isHit() ? 'true' : 'false'}</td>
+                                    <td>#{dot.getHit_time()}</td>
+                                    <td>#{dot.getExecution_time()}</td>
                                 </tr>
                             </ui:repeat>
                             </tbody>

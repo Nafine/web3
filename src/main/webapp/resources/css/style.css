@@ -95,20 +95,21 @@ a {
 }
 
 .btn-submit {
-  background: white;
-  border-color: lightgray;
-  border-radius: 1.3em;
-  padding: 0.5em;
-  margin: 1em;
+  background: white !important;
+  border-color: lightgray !important;
+  color: black !important;
+  border-radius: 1.3em !important;
+  padding: 0.5em !important;
+  margin: 1em !important;
   min-width: 2.5em;
   transition: background-color 0.3s ease;
 }
 .btn-submit:not(:disabled):hover {
-  background-color: oklch(from #FF6500 calc(l * 1.8) c h);
-  color: white;
+  background-color: oklch(from #FF6500 calc(l * 1.8) c h) !important;
+  color: white !important;
 }
 .btn-submit:disabled:hover {
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 
 .center-aligner, .grid-aligner {
@@ -176,8 +177,8 @@ main .main-table tr td:nth-child(3) {
 }
 
 #requestTable {
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
   width: max-content;
   overflow-wrap: break-word;
 }

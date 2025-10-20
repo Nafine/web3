@@ -3,9 +3,8 @@ package se.ifmo.faces;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import se.ifmo.api.dots.Dot;
-import se.ifmo.api.hit.HitRequest;
-import se.ifmo.api.hit.HitResponse;
+import lombok.Getter;
+import se.ifmo.api.Dot;
 import se.ifmo.db.DotManager;
 
 import java.io.Serializable;
@@ -17,7 +16,9 @@ import java.util.List;
 @SessionScoped
 public class ResultsBin implements Serializable {
     private final DotManager dm = new DotManager();
+    @Getter
     private int currentPage = 1;
+    @Getter
     private int pageSize = 10;
     @Inject
     private FormBean form;
@@ -32,9 +33,9 @@ public class ResultsBin implements Serializable {
                         (x <= 0 && x >= -r / 2 && y >= 0 && y <= r) ||
                         (x <= 0 && y <= 0 && (Math.abs(x) + Math.abs(y) <= r / 2)))
         );
-        dm.add(new Dot(new HitRequest(x, y, r), new HitResponse(hit, LocalDateTime.now()
+        dm.add(new Dot(x, y, r, hit, LocalDateTime.now()
                 .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                System.nanoTime() - start)));
+                System.nanoTime() - start));
     }
 
     public List<Dot> getDots() {
@@ -53,18 +54,9 @@ public class ResultsBin implements Serializable {
         currentPage = 1;
     }
 
-    public int getPageSize() {
-        return pageSize;
-    }
-
     public void setPageSize(int pageSize) {
-        System.out.printf("New page size: %d\n", pageSize);
         this.pageSize = pageSize;
         currentPage = 1;
-    }
-
-    public int getCurrentPage() {
-        return currentPage;
     }
 
     public void prevPage() {
