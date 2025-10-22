@@ -2,9 +2,7 @@ const canvas = document.getElementById("graph");
 const ctx = canvas.getContext("2d");
 
 const canvasCfg = {
-    basisR: canvas.width * 0.4,
-    r: 1,
-    shift: 10
+    basisR: canvas.width * 0.4, r: 1, shift: 10
 }
 
 $(draw)
@@ -20,7 +18,7 @@ function refresh(r = canvasCfg.r) {
     draw();
 }
 
-function clear() {
+function clearCanvas() {
     dots = [];
     refresh();
 }
@@ -40,13 +38,13 @@ function draw() {
 }
 
 function drawShape() {
-    drawCircle(canvas.width / 2, canvas.height / 2, 3 * Math.PI / 2, 0);
+    drawCircle(canvas.width / 2, canvas.height / 2, 0, Math.PI / 2);
     ctx.beginPath();
-    ctx.fillRect(canvas.width / 2 - canvasCfg.basisR / 2, canvas.height / 2, canvasCfg.basisR / 2, -canvasCfg.basisR);
-    drawTriangle(
-        {x: canvas.width / 2, y: canvas.height / 2},
-        {x: canvas.width / 2 - canvasCfg.basisR / 2, y: canvas.height / 2},
-        {x: canvas.width / 2, y: canvas.height / 2 + canvasCfg.basisR / 2});
+    ctx.fillRect(canvas.width / 2, canvas.height / 2, canvasCfg.basisR, -canvasCfg.basisR);
+    drawTriangle({x: canvas.width / 2, y: canvas.height / 2}, {
+        x: canvas.width / 2 - canvasCfg.basisR / 2,
+        y: canvas.height / 2
+    }, {x: canvas.width / 2, y: canvas.height / 2 - canvasCfg.basisR});
 }
 
 function drawCircle(x, y, startAngle, endAngle) {
@@ -58,19 +56,32 @@ function drawCircle(x, y, startAngle, endAngle) {
 
 let dots = []
 
-function addPoint(dot) {
+function drawDots() {
+    $('#requestTable tr').each(function () {
+        let row = $(this).children('td');
+
+        let x = parseFloat(row.eq(0).text());
+        let y = parseFloat(row.eq(1).text());
+        let hit = row.eq(3).text() === 'true';
+
+        addDot({x: x, y: y, hit: hit});
+    })
+}
+
+function addDot(dot) {
     dots.push(dot);
     drawDot(dot)
 }
 
-function drawDot(dot, color = 'rgb(0,0,0)', r = canvasCfg.r) {
+function drawDot(dot, r = canvasCfg.r) {
     ctx.save();
-    ctx.fillStyle = color;
+    ctx.fillStyle = dot.hit ? '#FF6500' : 'black';
 
     ctx.beginPath();
     ctx.moveTo(dot.x, dot.y);
     ctx.arc(canvas.width / 2 + canvasCfg.basisR / r * dot.x,
-        canvas.height / 2 - canvasCfg.basisR / r * dot.y, canvasCfg.basisR / 50, 0, Math.PI * 2);
+        canvas.height / 2 - canvasCfg.basisR / r * dot.y,
+        canvasCfg.basisR / 50, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.restore();
@@ -115,19 +126,13 @@ function drawArrows() {
     ctx.stroke();
 }
 
-const labels = [
-    {mult: 1, x: canvasCfg.basisR, y: 0},
-    {mult: 1, x: 0, y: canvasCfg.basisR},
+const labels = [{mult: 1, x: canvasCfg.basisR, y: 0}, {mult: 1, x: 0, y: canvasCfg.basisR},
 
-    {mult: 0.5, x: canvasCfg.basisR / 2, y: 0},
-    {mult: 0.5, x: 0, y: canvasCfg.basisR / 2},
+    {mult: 0.5, x: canvasCfg.basisR / 2, y: 0}, {mult: 0.5, x: 0, y: canvasCfg.basisR / 2},
 
-    {mult: -1, x: -canvasCfg.basisR, y: 0},
-    {mult: -1, x: 0, y: -canvasCfg.basisR},
+    {mult: -1, x: -canvasCfg.basisR, y: 0}, {mult: -1, x: 0, y: -canvasCfg.basisR},
 
-    {mult: -0.5, x: -canvasCfg.basisR / 2, y: 0},
-    {mult: -0.5, x: 0, y: -canvasCfg.basisR / 2}
-]
+    {mult: -0.5, x: -canvasCfg.basisR / 2, y: 0}, {mult: -0.5, x: 0, y: -canvasCfg.basisR / 2}]
 
 function drawText() {
     drawLabels();
@@ -157,13 +162,11 @@ function drawTick(label) {
     const tickLength = 5;
     if (label.x === 0) {
         drawLine({x: canvas.width / 2 + tickLength, y: canvas.height / 2 + label.y}, {
-            x: canvas.width / 2 - tickLength,
-            y: canvas.height / 2 + label.y
+            x: canvas.width / 2 - tickLength, y: canvas.height / 2 + label.y
         });
     } else {
         drawLine({x: canvas.width / 2 + label.x, y: canvas.height / 2 + tickLength}, {
-            x: canvas.width / 2 + label.x,
-            y: canvas.height / 2 - tickLength
+            x: canvas.width / 2 + label.x, y: canvas.height / 2 - tickLength
         },);
     }
 }

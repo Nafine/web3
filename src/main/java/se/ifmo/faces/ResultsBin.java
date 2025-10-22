@@ -4,6 +4,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
+import org.primefaces.PrimeFaces;
 import se.ifmo.api.Dot;
 import se.ifmo.db.DotManager;
 
@@ -29,9 +30,9 @@ public class ResultsBin implements Serializable {
         double y = form.getY();
         double r = form.getR();
         boolean hit = (Math.abs(x) <= r && Math.abs(y) <= r && (
-                (x >= 0 && y >= 0 && (x * x + y * y <= r * r / 4)) ||
-                        (x <= 0 && x >= -r / 2 && y >= 0 && y <= r) ||
-                        (x <= 0 && y <= 0 && (Math.abs(x) + Math.abs(y) <= r / 2)))
+                (x <= 0 && y >= 0 && (2 * x + y <= r)) ||
+                        (x >= 0 && x <= r && y >= 0 && y <= r) ||
+                        (x >= 0 && y <= 0 && (x * x + y * y <= r * r / 4)))
         );
         dm.add(new Dot(x, y, r, hit, LocalDateTime.now()
                 .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
@@ -39,12 +40,15 @@ public class ResultsBin implements Serializable {
     }
 
     public List<Dot> getDots() {
+        PrimeFaces.current().executeScript("drawDots()");
         int from = (currentPage - 1) * pageSize;
         int to = Math.min(currentPage * pageSize, dm.get().size());
 
         if (from >= dm.get().size()) {
             return Collections.emptyList();
         }
+
+        System.out.println(dm.get().size());
 
         return dm.get().subList(from, to);
     }
