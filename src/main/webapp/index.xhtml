@@ -21,16 +21,18 @@
     </header>
     <div class="center-aligner">
         <h:form>
-            <h:outputText id="serverTime" value="#{clockView.dateTime}" />
+            <div class="shadowed-box center-aligner" style="padding: 1em;">
+                <h:outputText id="serverTime" value="#{clockView.dateTime}"/>
+            </div>
 
             <p:poll interval="7"
                     update="serverTime"
                     listener="#{clockView.update}"
-                    autoStart="true" />
+                    autoStart="true"/>
         </h:form>
     </div>
     <div class="center-aligner">
-        <a href="main.xhtml">To main</a>
+        <button onclick="window.location.href='main.xhtml'" class="btn-submit">To main</button>
     </div>
 </h:body>
 </html>

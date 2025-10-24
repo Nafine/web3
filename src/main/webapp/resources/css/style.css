@@ -94,24 +94,6 @@ a {
   text-decoration: none;
 }
 
-.btn-submit {
-  background: white !important;
-  border-color: lightgray !important;
-  color: black !important;
-  border-radius: 1.3em !important;
-  padding: 0.5em !important;
-  margin: 1em !important;
-  min-width: 2.5em;
-  transition: background-color 0.3s ease;
-}
-.btn-submit:not(:disabled):hover {
-  background-color: oklch(from #FF6500 calc(l * 1.8) c h) !important;
-  color: white !important;
-}
-.btn-submit:disabled:hover {
-  cursor: not-allowed !important;
-}
-
 .center-aligner, .grid-aligner {
   justify-content: center;
   flex-direction: column;
@@ -167,6 +149,25 @@ canvas, fieldset, #requestTable {
 .shadowed-box {
   background-color: white;
   box-shadow: 2px 2px 2px 2px rgb(235, 235, 235);
+  border-radius: 1em;
+}
+
+.btn-submit {
+  background: white !important;
+  border-color: lightgray !important;
+  color: black !important;
+  border-radius: 1.3em !important;
+  padding: 0.5em !important;
+  margin: 1em !important;
+  min-width: 2.5em;
+  transition: background-color 0.3s ease;
+}
+.btn-submit:not(:disabled):hover {
+  background-color: oklch(from #FF6500 calc(l * 1.8) c h) !important;
+  color: white !important;
+}
+.btn-submit:disabled:hover {
+  cursor: not-allowed !important;
 }
 
 main .main-table {

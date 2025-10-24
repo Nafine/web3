@@ -1,5 +1,7 @@
 package se.ifmo.faces;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -17,6 +19,7 @@ import java.util.List;
 @SessionScoped
 public class ResultsBin implements Serializable {
     private final DotManager dm = new DotManager();
+    private Dot last = null;
     @Getter
     private int currentPage = 1;
     @Getter
@@ -29,18 +32,20 @@ public class ResultsBin implements Serializable {
         double x = form.getX();
         double y = form.getY();
         double r = form.getR();
+        System.out.printf("r: %f\n", r);
         boolean hit = (Math.abs(x) <= r && Math.abs(y) <= r && (
-                (x <= 0 && y >= 0 && (2 * x + y <= r)) ||
+                (x <= 0 && y >= 0 && (2 * Math.abs(x) + Math.abs(y) <= r)) ||
                         (x >= 0 && x <= r && y >= 0 && y <= r) ||
                         (x >= 0 && y <= 0 && (x * x + y * y <= r * r / 4)))
         );
         dm.add(new Dot(x, y, r, hit, LocalDateTime.now()
                 .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 System.nanoTime() - start));
+        last = dm.get().getLast();
+        PrimeFaces.current().executeScript(String.format("drawLast(%s)", getLast()));
     }
 
     public List<Dot> getDots() {
-        PrimeFaces.current().executeScript("drawDots()");
         int from = (currentPage - 1) * pageSize;
         int to = Math.min(currentPage * pageSize, dm.get().size());
 
@@ -48,19 +53,29 @@ public class ResultsBin implements Serializable {
             return Collections.emptyList();
         }
 
-        System.out.println(dm.get().size());
-
         return dm.get().subList(from, to);
+    }
+
+    public String getLast() {
+        if (last == null) return "{}";
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        return gson.toJson(last);
     }
 
     public void clear() {
         dm.clear();
+        last = null;
         currentPage = 1;
     }
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
         currentPage = 1;
+    }
+
+    public int totalPages() {
+        return (int) Math.ceil((double) dm.get().size() / pageSize);
     }
 
     public void prevPage() {

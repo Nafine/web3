@@ -16,15 +16,19 @@
 <h:body>
     <main class="grid-layout">
         <div class="grid-item">
-            <a href="index.xhtml">To index</a>
             <canvas class="graph shadowed-box" id="graph" width="500" height="500"/>
             <div class="input center-aligner" id="r">
                 <div>
-                    <h:outputText id="output" value="R: #{sliderView.r}"/>
-                    <h:inputHidden id="r-input" value="#{sliderView.r}"/>
-                    <p:slider for="r-input" display="output" style="width: 100px;" minValue="1.0" maxValue="4.0"
+                    <h:outputText id="output" value="R: #{formBean.r}"/>
+                    <h:inputHidden id="r-input" value="#{formBean.r}"/>
+                    <p:slider for="r-input"
+                              display="output"
+                              style="width: 100px;"
+                              minValue="1.0"
+                              maxValue="4.0"
                               step="0.5"
-                              displayTemplate="R: {value}" onSlideEnd="handleR()"/>
+                              displayTemplate="R: {value}"
+                              onSlideEnd="handleR()"/>
                 </div>
             </div>
         </div>
@@ -51,17 +55,22 @@
                                 <h:inputText id="y-input" name="y" maxlength="8" required="true" pp:placeholder="Y"
                                              value="#{formBean.y}">
                                     <f:convertNumber minFractionDigits="1" maxFractionDigits="4" locale="US"/>
+                                    <p:ajax event="blur" update=":form:form-submit"/>
+                                    <p:ajax event="keyup" update=":form:form-submit" delay="300"/>
                                 </h:inputText>
                             </div>
                         </div>
                         <div class="center-aligner">
                             <p:commandButton id="form-submit" value="Submit" styleClass="btn-submit"
                                              action="#{resultsBin.checkHit}"
-                                             update="requestTable"
+                                             update="resultPanel page-info"
                                              disableOnAjax="false"/>
                         </div>
                     </fieldset>
                 </h:form>
+            </div>
+            <div class="center-aligner">
+                <button onclick="window.location.href='index.xhtml'" class="btn-submit">To index</button>
             </div>
         </div>
 
@@ -72,30 +81,34 @@
                         <div class="pagination-row">
                             <p:commandButton icon="pi pi-arrow-left" styleClass="btn-submit"
                                              action="#{resultsBin.prevPage}"
-                                             update="requestTable"
+                                             update="resultPanel page-info"
                                              process="@this"/>
                             <p:commandButton styleClass="btn-submit" value="Clear points"
                                              action="#{resultsBin.clear}"
-                                             update="requestTable"
+                                             update="resultPanel page-info"
                                              process="@this"
                                              oncomplete="clearCanvas()"/>
                             <p:commandButton icon="pi pi-arrow-right" styleClass="btn-submit"
                                              action="#{resultsBin.nextPage}"
-                                             update="requestTable"
+                                             update="resultPanel page-info"
                                              process="@this"/>
                         </div>
                         <div class="pagination-row">
-                            <p:selectOneMenu value="#{resultsBin.pageSize}">
+                            <h:outputText id="page-info"
+                                          value="#{resultsBin.currentPage}/#{resultsBin.totalPages()}"/>
+                        </div>
+                        <div class="pagination-row">
+                            <p:selectOneMenu value="#{resultsBin.pageSize}" style="margin: 10px;">
                                 <f:selectItem itemValue="5" itemLabel="5"/>
                                 <f:selectItem itemValue="10" itemLabel="10"/>
                                 <f:selectItem itemValue="15" itemLabel="15"/>
-                                <p:ajax update="requestTable" listener="#{resultsBin.onPageSizeChange}"
+                                <p:ajax update="resultPanel page-info" listener="#{resultsBin.onPageSizeChange}"
                                         process="@this"/>
                             </p:selectOneMenu>
                         </div>
                     </h:form>
-                    <h:panelGroup id="requestTable">
-                        <table style="width: 100%">
+                    <h:panelGroup id="resultPanel">
+                        <table id="requestTable">
                             <thead>
                             <tr>
                                 <th>X</th>
@@ -118,6 +131,9 @@
                                 </tr>
                             </ui:repeat>
                             <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    drawDots();
+                                });
                                 drawDots();
                             </script>
                             </tbody>

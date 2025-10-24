@@ -11,7 +11,7 @@ $('#requestTable tbody').on('click mouseenter mouseleave', 'tr', function (event
     let hit = row.eq(3).text() === "true";
 
     if (event.type === 'mouseenter') {
-        drawDot({x: x, y: y, hit: hit});
+        drawDot({x: x, y: y, hit: hit}, 'red');
     } else if (event.type === 'mouseleave') {
         refresh(parseFloat($('#r-input').val()));
     }
@@ -32,7 +32,6 @@ $('#graph').on('click', function (e) {
 
     if (xInput) xInput.value = pos.x;
     if (xDisplay) xDisplay.textContent = 'X: ' + pos.x;
-
 
     const yInput = document.querySelector('[name$=":y-input"]');
     if (yInput) yInput.value = pos.y;

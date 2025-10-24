@@ -122,29 +122,6 @@ a {
   text-decoration: none;
 }
 
-.btn-submit {
-  background: white !important;
-  border-color: lightgray !important;
-  color: black !important;
-
-  border-radius: $border-radius + 0.3em !important;
-  padding: 0.5em !important;
-  margin: 1em !important;
-
-  min-width: 2.5em;
-
-  transition: $transition;
-
-  &:not(:disabled):hover {
-    background-color: $light-orange !important;
-    color: white !important;
-  }
-
-  &:disabled:hover {
-    cursor: not-allowed !important;
-  }
-}
-
 .center-aligner, .grid-aligner {
   justify-content: center;
   flex-direction: column;
@@ -202,6 +179,30 @@ canvas, fieldset, #requestTable {
 .shadowed-box {
   background-color: white;
   box-shadow: $box-shadow;
+  border-radius: $border-radius;
+}
+
+.btn-submit {
+  background: white !important;
+  border-color: lightgray !important;
+  color: black !important;
+
+  border-radius: $border-radius + 0.3em !important;
+  padding: 0.5em !important;
+  margin: 1em !important;
+
+  min-width: 2.5em;
+
+  transition: $transition;
+
+  &:not(:disabled):hover {
+    background-color: $light-orange !important;
+    color: white !important;
+  }
+
+  &:disabled:hover {
+    cursor: not-allowed !important;
+  }
 }
 
 main {

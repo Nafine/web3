@@ -28,7 +28,7 @@ public class DotManager {
 
     public List<Dot> get() {
         em.getTransaction().begin();
-        dots = em.createQuery("SELECT d FROM Dot d").getResultList();
+        dots = em.createQuery("SELECT d FROM Dot d ORDER BY id").getResultList();
         em.getTransaction().commit();
         return dots;
     }

@@ -23,6 +23,11 @@ function clearCanvas() {
     refresh();
 }
 
+function drawLast(dot) {
+    console.log(dot);
+    addDot({x: dot.x, y: dot.y, r: dot.r, hit: dot.hit});
+}
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -62,9 +67,10 @@ function drawDots() {
 
         let x = parseFloat(row.eq(0).text());
         let y = parseFloat(row.eq(1).text());
+        let r = parseFloat(row.eq(2).text())
         let hit = row.eq(3).text() === 'true';
 
-        addDot({x: x, y: y, hit: hit});
+        addDot({x: x, y: y, r: r, hit: hit});
     })
 }
 
@@ -73,9 +79,14 @@ function addDot(dot) {
     drawDot(dot)
 }
 
-function drawDot(dot, r = canvasCfg.r) {
+function drawDot(dot, color = null, r = canvasCfg.r) {
     ctx.save();
-    ctx.fillStyle = dot.hit ? '#FF6500' : 'black';
+
+    if (color == null) {
+        ctx.fillStyle = dot.hit ? '#FF6500' : 'black';
+    } else {
+        ctx.fillStyle = color;
+    }
 
     ctx.beginPath();
     ctx.moveTo(dot.x, dot.y);
