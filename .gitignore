@@ -1,3 +1,4 @@
+.env
 vdska_deploy.sh
 persistence.xml
 package-lock.json

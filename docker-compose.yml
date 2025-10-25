@@ -1,19 +1,21 @@
 version: '3.5'
 services:
   wildfly:
-    image: quay.io/wildfly/wildfly
+    build:
+      context: .
+      #from .env
+      args:
+        - DATABASE_URL=${DATABASE_URL}
+        - DB_USERNAME=${DB_USERNAME}
+        - DB_PASSWORD=${DB_PASSWORD}
+        - WAR_PATH=${WAR_PATH}
     container_name: web3
     ports:
       - "8080:8080"
       - "9990:9990"
-    #Чтобы не менять права доступа на сервере можно прочитать файлы для деплоя и записать их в удобную директорию,
-    #откуда уже можно положить их в удобный volume, куда wildfly сможет писать при необходимости
     volumes:
-      - ./target/server/standalone/deployments:/opt/input:ro
-      - wildfly_deployments:/opt/jboss/wildfly/standalone/deployments
+      - wildfly_config:/opt/jboss/wildfly/standalone/configuration
     restart: unless-stopped
-    command: >
-      sh -c "cp -r /opt/input/* /opt/jboss/wildfly/standalone/deployments/ && /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0"
     depends_on:
       - postgres
     networks:
@@ -22,7 +24,8 @@ services:
     image: postgres:16.0
     container_name: web3_db
     environment:
-      POSTGRES_PASSWORD: change_me
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -32,8 +35,8 @@ services:
     networks:
       - default
 volumes:
-  wildfly_deployments:
   wildfly_data:
+  wildfly_config:
 networks:
   default:
     driver: bridge

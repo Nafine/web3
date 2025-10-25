@@ -1,35 +1,31 @@
 package se.ifmo.db;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import se.ifmo.api.Dot;
 
-import java.util.LinkedList;
 import java.util.List;
 
+@ApplicationScoped
 public class DotManager {
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("se.ifmo.web3");
-    private final EntityManager em = emf.createEntityManager();
-    private List<Dot> dots = new LinkedList<>();
 
+    @PersistenceContext(name = "se.ifmo.web3")
+    private EntityManager em;
+
+    @Transactional
     public void add(Dot dot) {
-        this.em.getTransaction().begin();
         em.persist(dot);
-        em.getTransaction().commit();
     }
 
+    @Transactional
     public void clear() {
-        em.getTransaction().begin();
         em.createQuery("DELETE FROM Dot").executeUpdate();
-        em.getTransaction().commit();
-        dots.clear();
     }
 
     public List<Dot> get() {
-        em.getTransaction().begin();
-        dots = em.createQuery("SELECT d FROM Dot d ORDER BY id").getResultList();
-        em.getTransaction().commit();
-        return dots;
+        return em.createQuery("SELECT d FROM Dot d ORDER BY d.id", Dot.class)
+                .getResultList();
     }
 }

@@ -18,7 +18,9 @@ import java.util.List;
 @Named
 @SessionScoped
 public class ResultsBin implements Serializable {
-    private final DotManager dm = new DotManager();
+    @Inject
+    private DotManager dm;
+
     private Dot last = null;
     @Getter
     private int currentPage = 1;
