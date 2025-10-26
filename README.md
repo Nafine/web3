@@ -14,7 +14,13 @@
    ```
  - убираете из docker-compose.yml секцию args.
 
-Чтобы запустить такое чудо инженерной мысли как wildfly необходимо сначала отредактировать файлы  **commands.cli** и **docker-compose.yml**:
+Чтобы запустить такое чудо инженерной мысли как wildfly необходимо сначала отредактировать файлы  **commands.cli** и **docker-compose.yml** и скачать драйвер базы данных.
+
+Для успешного подключения к бд необходимо скачать драйвер по вашему варианту. У меня это был postgresql.
+
+Например, вот postgresql [драйвер](https://jdbc.postgresql.org/download/postgresql-42.7.8.jar) версии 42.7.8.
+
+Его вы кладете в заранее созданную директорию *modules/org/postgresql/main* (находящуюся в том же катологе, что и dockerfile) вместе с **module.xml** файлом. Пример последнего лежит в репозитории по пути *modules/org/postgresql/main/module.xml*.
 
 ## **commands.cli**:
 
