@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <h:outputStylesheet library="css" name="normalize.css"/>
     <h:outputStylesheet library="css" name="style.css"/>
-    <title>Web-1</title>
+    <title>Web-3</title>
 </h:head>
 
 <h:body>
@@ -18,18 +18,22 @@
         <div class="grid-item">
             <canvas class="graph shadowed-box" id="graph" width="500" height="500"/>
             <div class="input center-aligner" id="r">
-                <div>
-                    <h:outputText id="output" value="R: #{formBean.r}"/>
-                    <h:inputHidden id="r-input" value="#{formBean.r}"/>
-                    <p:slider for="r-input"
-                              display="output"
-                              style="width: 100px;"
-                              minValue="1.0"
-                              maxValue="4.0"
-                              step="0.5"
-                              displayTemplate="R: {value}"
-                              onSlideEnd="handleR()"/>
-                </div>
+                <h:form>
+                    <h:panelGrid columns="1" style="margin-bottom: 8px;">
+                        <h:outputText id="output" value="R: #{formBean.r}"/>
+                        <h:inputHidden id="r-input" value="#{formBean.r}"/>
+                        <p:slider for="r-input"
+                                  display="output"
+                                  style="width: 100px;"
+                                  minValue="1.0"
+                                  maxValue="4.0"
+                                  step="0.5"
+                                  displayTemplate="R: {value}"
+                                  onSlideEnd="handleR()">
+                            <p:ajax event="slideEnd" process="@this r-input" update="output"/>
+                        </p:slider>
+                    </h:panelGrid>
+                </h:form>
             </div>
         </div>
 
@@ -55,15 +59,16 @@
                                 <h:inputText id="y-input" name="y" maxlength="8" required="true" pp:placeholder="Y"
                                              value="#{formBean.y}">
                                     <f:convertNumber minFractionDigits="1" maxFractionDigits="4" locale="US"/>
-                                    <p:ajax event="blur" update=":form:form-submit"/>
-                                    <p:ajax event="keyup" update=":form:form-submit" delay="300"/>
+                                    <f:validateDoubleRange minimum="-3" maximum="3"/>
                                 </h:inputText>
                             </div>
                         </div>
+                        <p class="err" id="y-err">Y coord must be between -3 and 3!</p>
                         <div class="center-aligner">
                             <p:commandButton id="form-submit" value="Submit" styleClass="btn-submit"
                                              action="#{resultsBin.checkHit}"
-                                             update="resultPanel page-info"
+                                             update="resultPanel :pagination-form:page-info"
+                                             process="@form"
                                              disableOnAjax="false"/>
                         </div>
                     </fieldset>
@@ -77,7 +82,7 @@
         <div class="grid-item">
             <div class="grid-aligner">
                 <div id="pagination-controls" class="shadowed-box">
-                    <h:form>
+                    <h:form id="pagination-form">
                         <div class="pagination-row">
                             <p:commandButton icon="pi pi-arrow-left" styleClass="btn-submit"
                                              action="#{resultsBin.prevPage}"
@@ -122,12 +127,18 @@
                             <tbody>
                             <ui:repeat value="#{resultsBin.dots}" var="dot">
                                 <tr>
-                                    <td>#{dot.getX()}</td>
-                                    <td>#{dot.getY()}</td>
-                                    <td>#{dot.getR()}</td>
+                                    <td><h:outputText value="#{dot.x}">
+                                        <f:convertNumber minFractionDigits="3" maxFractionDigits="3" locale="US"/>
+                                    </h:outputText></td>
+                                    <td><h:outputText value="#{dot.y}">
+                                        <f:convertNumber minFractionDigits="3" maxFractionDigits="3" locale="US"/>
+                                    </h:outputText></td>
+                                    <td><h:outputText value="#{dot.r}">
+                                        <f:convertNumber minFractionDigits="3" maxFractionDigits="3" locale="US"/>
+                                    </h:outputText></td>
                                     <td>#{dot.isHit() ? 'true' : 'false'}</td>
                                     <td>#{dot.getHit_time()}</td>
-                                    <td>#{dot.getExecution_time()}</td>
+                                    <td>#{dot.getExecution_time()}ns</td>
                                 </tr>
                             </ui:repeat>
                             <script>

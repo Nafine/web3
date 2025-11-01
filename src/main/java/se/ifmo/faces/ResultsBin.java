@@ -34,7 +34,6 @@ public class ResultsBin implements Serializable {
         double x = form.getX();
         double y = form.getY();
         double r = form.getR();
-        System.out.printf("r: %f\n", r);
         boolean hit = (Math.abs(x) <= r && Math.abs(y) <= r && (
                 (x <= 0 && y >= 0 && (2 * Math.abs(x) + Math.abs(y) <= r)) ||
                         (x >= 0 && x <= r && y >= 0 && y <= r) ||

@@ -88,21 +88,7 @@
                             <location>wildfly@maven(org.jboss.universe:community-universe)</location>
                         </feature-pack>
                     </feature-packs>
-                    <layers>
-                        <layer>web-server</layer>
-                        <layer>jaxrs-server</layer>
-                        <layer>jsf</layer>
-                    </layers>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>build-wildfly-image</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>package</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
