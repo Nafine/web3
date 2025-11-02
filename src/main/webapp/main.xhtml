@@ -4,7 +4,8 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="jakarta.faces.core"
       xmlns:pp="jakarta.faces.passthrough"
-      xmlns:ui="jakarta.faces.facelets">
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:custom="http://ifmo.se/tags/custom">
 <h:head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -113,42 +114,39 @@
                         </div>
                     </h:form>
                     <h:panelGroup id="resultPanel">
-                        <table id="requestTable">
-                            <thead>
-                            <tr>
-                                <th>X</th>
-                                <th>Y</th>
-                                <th>R</th>
-                                <th>Hit</th>
-                                <th>Request time</th>
-                                <th>Exec. time</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <ui:repeat value="#{resultsBin.dots}" var="dot">
-                                <tr>
-                                    <td><h:outputText value="#{dot.x}">
-                                        <f:convertNumber minFractionDigits="3" maxFractionDigits="3" locale="US"/>
-                                    </h:outputText></td>
-                                    <td><h:outputText value="#{dot.y}">
-                                        <f:convertNumber minFractionDigits="3" maxFractionDigits="3" locale="US"/>
-                                    </h:outputText></td>
-                                    <td><h:outputText value="#{dot.r}">
-                                        <f:convertNumber minFractionDigits="3" maxFractionDigits="3" locale="US"/>
-                                    </h:outputText></td>
-                                    <td>#{dot.isHit() ? 'true' : 'false'}</td>
-                                    <td>#{dot.getHit_time()}</td>
-                                    <td>#{dot.getExecution_time()}ns</td>
-                                </tr>
-                            </ui:repeat>
-                            <script>
-                                document.addEventListener("DOMContentLoaded", function () {
-                                    drawDots();
-                                });
+                        <custom:advancedTable id="requestTable"
+                                              value="#{resultsBin.dots}"
+                                              var="item"
+                                              exportable="true">
+                            <custom:column field="x"
+                                           headerText="X"
+                                           sortable="true"
+                                           minValue="-3"
+                                           maxValue="3"
+                                           maxLength="6"/>
+                            <custom:column field="y"
+                                           headerText="Y"
+                                           sortable="true"
+                                           minValue="-3"
+                                           maxValue="3"
+                                           maxLength="6"/>
+                            <custom:column field="r"
+                                           headerText="R"
+                                           sortable="true"
+                                           maxLength="6"/>
+                            <custom:column field="hit"
+                                           headerText="Hit"
+                                           sortable="true"/>
+                            <custom:column field="execution_time"
+                                           headerText="Execution time(ns)"
+                                           sortable="true"/>
+                        </custom:advancedTable>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
                                 drawDots();
-                            </script>
-                            </tbody>
-                        </table>
+                            });
+                            drawDots();
+                        </script>
                     </h:panelGroup>
                 </div>
             </div>

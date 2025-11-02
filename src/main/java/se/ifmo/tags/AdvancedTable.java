@@ -29,6 +29,11 @@ public class AdvancedTable extends UIData {
         var writer = context.getResponseWriter();
         var clientId = getClientId(context);
 
+        writer.startElement("h:outputStylesheet", this);
+        writer.writeAttribute("library", "css", null);
+        writer.writeAttribute("name", "advanced-table.css", null);
+        writer.endElement("h:outputStylesheet");
+
         writer.startElement("div", this);
         writer.writeAttribute("id", clientId + "_wrapper", null);
         writer.writeAttribute("class", "advanced-table-wrapper", null);
@@ -42,9 +47,11 @@ public class AdvancedTable extends UIData {
         writer.writeAttribute("class", "advanced-table", null);
 
         encodeTableHeader(context);
-
         writer.startElement("tbody", this);
+    }
 
+    @Override
+    public void encodeChildren(FacesContext context) throws IOException {
         Object value = getValue();
         if (value instanceof List<?> items) {
             for (int i = 0; i < items.size(); i++) {
@@ -52,8 +59,11 @@ public class AdvancedTable extends UIData {
                 encodeRow(context);
             }
         }
+    }
 
-        writer.endElement("tbody");
+    @Override
+    public boolean getRendersChildren() {
+        return true;
     }
 
     private void encodeRow(FacesContext context) throws IOException {
@@ -77,27 +87,26 @@ public class AdvancedTable extends UIData {
         writer.endElement("tr");
     }
 
-    @Override
-    public void encodeEnd(FacesContext context) throws IOException {
-        setRowIndex(-1);
-        var writer = context.getResponseWriter();
-        writer.endElement("table");
-
-        if (isExportable()) {
-            encodeExportScript(context);
-        }
-
-        writer.endElement("div");
-    }
-
     protected void encodeTableHeader(FacesContext context) throws IOException {
         var writer = context.getResponseWriter();
         writer.startElement("thead", this);
         writer.startElement("tr", this);
 
+        var clientId = getClientId(context);
         getColumns().forEach(column -> {
             try {
-                column.encodeBegin(context);
+                writer.startElement("th", this);
+                if (column.isSortable()) {
+                    writer.writeAttribute("onclick",
+                            String.format("sortTable('%s', '%s', %d)",
+                                    clientId,
+                                    column.getField(),
+                                    getColumns().indexOf(column)),
+                            null);
+                    writer.writeAttribute("class", "sortable", null);
+                }
+                writer.write(column.getHeaderText());
+                writer.endElement("th");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -107,14 +116,32 @@ public class AdvancedTable extends UIData {
         writer.endElement("thead");
     }
 
+    @Override
+    public void encodeEnd(FacesContext context) throws IOException {
+        setRowIndex(-1);
+        var writer = context.getResponseWriter();
+        writer.endElement("tbody");
+        writer.endElement("table");
+
+        if (isExportable()) {
+            encodeExportScript(context);
+        }
+
+        encodeSortScript(context);
+        writer.endElement("div");
+    }
+
     protected void encodeExportButton(FacesContext context, String tableId) throws IOException {
         var writer = context.getResponseWriter();
+        writer.startElement("div", this);
+        writer.writeAttribute("class", "center-aligner", null);
         writer.startElement("button", this);
         writer.writeAttribute("type", "button", null);
-        writer.writeAttribute("class", "export-csv-btn", null);
+        writer.writeAttribute("class", "btn-submit", null);
         writer.writeAttribute("onclick", "exportTableToCSV('" + tableId + "')", null);
         writer.write("Экспорт в CSV");
         writer.endElement("button");
+        writer.endElement("div");
     }
 
     protected void encodeExportScript(FacesContext context) throws IOException {
@@ -136,6 +163,45 @@ public class AdvancedTable extends UIData {
                         link.download = 'export.csv';
                         link.click();
                     }
+                """);
+        writer.endElement("script");
+    }
+
+    protected void encodeSortScript(FacesContext context) throws IOException {
+        var writer = context.getResponseWriter();
+        writer.startElement("script", this);
+        writer.write("""
+                function sortTable(tableId, field, colIndex) {
+                    const table = document.getElementById(tableId);
+                    const tbody = table.querySelector('tbody');
+                    const rows = Array.from(tbody.getElementsByTagName('tr'));
+                    const th = table.querySelectorAll('th')[colIndex];
+                    const isAsc = th.classList.contains('asc');
+                    
+                    table.querySelectorAll('th').forEach(header => {
+                        header.classList.remove('asc', 'desc');
+                    });
+                    
+                    th.classList.add(isAsc ? 'desc' : 'asc');
+                    
+                    rows.sort((a, b) => {
+                        const aValue = a.cells[colIndex].textContent.trim();
+                        const bValue = b.cells[colIndex].textContent.trim();
+                        
+                        const aNum = parseFloat(aValue);
+                        const bNum = parseFloat(bValue);
+                        
+                        if (!isNaN(aNum) && !isNaN(bNum)) {
+                            return isAsc ? bNum - aNum : aNum - bNum;
+                        }
+                        
+                        return isAsc ? 
+                            bValue.localeCompare(aValue) : 
+                            aValue.localeCompare(bValue);
+                    });
+                    
+                    rows.forEach(row => tbody.appendChild(row));
+                }
                 """);
         writer.endElement("script");
     }

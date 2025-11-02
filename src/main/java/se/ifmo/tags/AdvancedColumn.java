@@ -4,11 +4,11 @@ import jakarta.faces.component.FacesComponent;
 import jakarta.faces.component.UIColumn;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.context.ResponseWriter;
-import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 @FacesComponent("se.ifmo.tags.AdvancedColumn")
 @Setter
@@ -91,35 +91,33 @@ public class AdvancedColumn extends UIColumn {
         if (field == null) return true;
 
         Object value = getValueFromItem(item);
-        switch (value) {
-            case null -> {
-                return true;
+        if (value == null) return true;
+
+        if (filterPattern != null && value instanceof String str) {
+            return str.matches(filterPattern);
+        }
+
+        if (minLength != null || maxLength != null) {
+            String str = value.toString();
+            boolean lengthValid = true;
+            if (minLength != null) {
+                lengthValid = str.length() >= minLength;
             }
-            case String str when filterPattern != null -> {
-                return str.matches(filterPattern);
+            if (maxLength != null) {
+                lengthValid = lengthValid && str.length() <= maxLength;
             }
-            case String str -> {
-                boolean lengthValid = true;
-                if (minLength != null) {
-                    lengthValid = str.length() >= minLength;
-                }
-                if (maxLength != null) {
-                    lengthValid = lengthValid && str.length() <= maxLength;
-                }
-                return lengthValid;
+            return lengthValid;
+        }
+
+        if (value instanceof Number num) {
+            boolean rangeValid = true;
+            if (min != null) {
+                rangeValid = num.doubleValue() >= min.doubleValue();
             }
-            case Number num -> {
-                boolean rangeValid = true;
-                if (min != null) {
-                    rangeValid = num.doubleValue() >= min.doubleValue();
-                }
-                if (max != null) {
-                    rangeValid = rangeValid && num.doubleValue() <= max.doubleValue();
-                }
-                return rangeValid;
+            if (max != null) {
+                rangeValid = rangeValid && num.doubleValue() <= max.doubleValue();
             }
-            default -> {
-            }
+            return rangeValid;
         }
 
         return true;
