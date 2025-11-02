@@ -1,9 +1,8 @@
 package se.ifmo.tags;
 
-import jakarta.faces.component.UIData;
 import jakarta.faces.component.FacesComponent;
+import jakarta.faces.component.UIData;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.context.ResponseWriter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +18,6 @@ public class AdvancedTable extends UIData {
     public static final String COMPONENT_FAMILY = "se.ifmo.tags.AdvancedTable";
 
     private boolean exportable;
-    private boolean groupable;
 
     @Override
     public String getFamily() {
@@ -31,25 +29,20 @@ public class AdvancedTable extends UIData {
         var writer = context.getResponseWriter();
         var clientId = getClientId(context);
 
-        // Контейнер таблицы
         writer.startElement("div", this);
         writer.writeAttribute("id", clientId + "_wrapper", null);
         writer.writeAttribute("class", "advanced-table-wrapper", null);
 
-        // Кнопка экспорта
         if (isExportable()) {
             encodeExportButton(context, clientId);
         }
 
-        // Таблица
         writer.startElement("table", this);
         writer.writeAttribute("id", clientId, null);
         writer.writeAttribute("class", "advanced-table", null);
 
-        // Заголовок таблицы
         encodeTableHeader(context);
 
-        // Тело таблицы
         writer.startElement("tbody", this);
 
         Object value = getValue();
@@ -70,14 +63,12 @@ public class AdvancedTable extends UIData {
         for (AdvancedColumn column : getColumns()) {
             writer.startElement("td", this);
 
-            // Используем getVar() для доступа к переменной строки
             String fieldExpression = String.format("#{%s.%s}", getVar(), column.getField());
             Object cellValue = context.getApplication()
                     .getExpressionFactory()
                     .createValueExpression(context.getELContext(), fieldExpression, Object.class)
                     .getValue(context.getELContext());
 
-            // Записываем значение
             writer.write(cellValue != null ? cellValue.toString() : "");
 
             writer.endElement("td");
@@ -88,7 +79,7 @@ public class AdvancedTable extends UIData {
 
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
-        setRowIndex(-1); // Сбрасываем индекс строки
+        setRowIndex(-1);
         var writer = context.getResponseWriter();
         writer.endElement("table");
 
