@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facelet-taglib xmlns="https://jakarta.ee/xml/ns/jakartaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facelettaglibrary_4_0.xsd"
+                version="4.0">
+
+    <namespace>http://ifmo.se/tags/custom</namespace>
+    <short-name>custom</short-name>
+
+    <tag>
+        <tag-name>advancedTable</tag-name>
+        <component>
+            <component-type>se.ifmo.tags.AdvancedTable</component-type>
+            <handler-class>jakarta.faces.view.facelets.ComponentHandler</handler-class>
+        </component>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <name>var</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>exportable</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>groupable</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <tag-name>column</tag-name>
+        <component>
+            <component-type>se.ifmo.tags.AdvancedColumn</component-type>
+            <handler-class>jakarta.faces.view.facelets.ComponentHandler</handler-class>
+        </component>
+        <attribute>
+            <name>field</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>headerText</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>sortable</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>groupable</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>filterPattern</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>minLength</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <name>maxLength</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <name>minValue</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <name>maxValue</name>
+            <type>java.lang.Object</type>
+        </attribute>
+    </tag>
+
+</facelet-taglib>

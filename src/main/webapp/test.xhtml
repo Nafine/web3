@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:custom="http://ifmo.se/tags/custom">
+
+    <h:head>
+        <title>Список сотрудников</title>
+        <h:outputStylesheet name="css/advanced-table.css" />
+    </h:head>
+
+    <h:body>
+        <h:form>
+            <custom:advancedTable value="#{employeeBean.employees}"
+                                var="emp"
+                                exportable="true"
+                                groupable="true">
+
+                <custom:column field="name"
+                             headerText="ФИО"
+                             sortable="true"
+                             filterPattern="^[А-Яа-яЁё\s]{2,50}$"
+                             minLength="2"
+                             maxLength="50"/>
+
+                <custom:column field="salary"
+                             headerText="Зарплата"
+                             sortable="true"
+                             minValue="30000"
+                             maxValue="500000"/>
+
+                <custom:column field="department"
+                             headerText="Отдел"
+                             groupable="true"
+                             filterPattern="^(HR|IT|Продажи|Маркетинг)$"/>
+
+                <custom:column field="hireDate"
+                             headerText="Дата приема"
+                             sortable="true"/>
+
+            </custom:advancedTable>
+        </h:form>
+    </h:body>
+</html>
