@@ -60,6 +60,7 @@
 DATABASE_URL=jdbc:postgresql://web3_db:5432/web3_db
 DB_USERNAME=shkibidist
 DB_PASSWORD=shkibidi
+DB_NAME=web3_db
 WAR_PATH=path_to_web_archive
 ```
 
