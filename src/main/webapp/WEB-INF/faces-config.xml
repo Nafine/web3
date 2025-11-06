@@ -14,5 +14,4 @@
         <component-type>se.ifmo.tags.AdvancedColumn</component-type>
         <component-class>se.ifmo.tags.AdvancedColumn</component-class>
     </component>
-
 </faces-config>

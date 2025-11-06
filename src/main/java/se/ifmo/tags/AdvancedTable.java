@@ -139,7 +139,7 @@ public class AdvancedTable extends UIData {
         writer.writeAttribute("type", "button", null);
         writer.writeAttribute("class", "btn-submit", null);
         writer.writeAttribute("onclick", "exportTableToCSV('" + tableId + "')", null);
-        writer.write("Экспорт в CSV");
+        writer.write("CSV Export");
         writer.endElement("button");
         writer.endElement("div");
     }
@@ -151,19 +151,19 @@ public class AdvancedTable extends UIData {
                     function exportTableToCSV(tableId) {
                         const table = document.getElementById(tableId);
                         const rows = table.querySelectorAll('tr');
-                        const csv = Array.from(rows).map(row => 
+                        const csv = Array.from(rows).map(row =>\s
                             Array.from(row.querySelectorAll('td,th'))
                                 .map(cell => '"' + cell.innerText.replace(/"/g, '""') + '"')
                                 .join(',')
                         ).join('\\n');
-                
+               \s
                         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                         const link = document.createElement('a');
                         link.href = URL.createObjectURL(blob);
                         link.download = 'export.csv';
                         link.click();
                     }
-                """);
+               \s""");
         writer.endElement("script");
     }
 
@@ -177,32 +177,32 @@ public class AdvancedTable extends UIData {
                     const rows = Array.from(tbody.getElementsByTagName('tr'));
                     const th = table.querySelectorAll('th')[colIndex];
                     const isAsc = th.classList.contains('asc');
-                    
+                   \s
                     table.querySelectorAll('th').forEach(header => {
                         header.classList.remove('asc', 'desc');
                     });
-                    
+                   \s
                     th.classList.add(isAsc ? 'desc' : 'asc');
-                    
+                   \s
                     rows.sort((a, b) => {
                         const aValue = a.cells[colIndex].textContent.trim();
                         const bValue = b.cells[colIndex].textContent.trim();
-                        
+                       \s
                         const aNum = parseFloat(aValue);
                         const bNum = parseFloat(bValue);
-                        
+                       \s
                         if (!isNaN(aNum) && !isNaN(bNum)) {
                             return isAsc ? bNum - aNum : aNum - bNum;
                         }
-                        
-                        return isAsc ? 
-                            bValue.localeCompare(aValue) : 
+                       \s
+                        return isAsc ?\s
+                            bValue.localeCompare(aValue) :\s
                             aValue.localeCompare(bValue);
                     });
-                    
+                   \s
                     rows.forEach(row => tbody.appendChild(row));
                 }
-                """);
+               \s""");
         writer.endElement("script");
     }
 

@@ -7,9 +7,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+@Named
 @Setter
 @Getter
-@Named
 @SessionScoped
 public class FormBean implements Serializable {
     private double y = 1;

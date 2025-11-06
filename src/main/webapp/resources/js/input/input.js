@@ -1,3 +1,5 @@
+$(handleR);
+
 function handleR() {
     let radius = parseFloat(document.querySelector('[name$=":r-input"]').value);
     refresh(radius);
