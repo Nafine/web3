@@ -20,9 +20,15 @@
 
 Например, вот postgresql [драйвер](https://jdbc.postgresql.org/download/postgresql-42.7.8.jar) версии 42.7.8.
 
-Его вы кладете в заранее созданную директорию *modules/org/postgresql/main* (находящуюся в том же катологе, что и dockerfile) вместе с **module.xml** файлом. Пример последнего лежит в репозитории по пути *modules/org/postgresql/main/module.xml*.
+Его вы кладете в заранее созданную директорию *modules/org/postgresql/main* (находящуюся в том же каталоге, что и dockerfile) вместе с **module.xml** файлом. Пример последнего лежит в репозитории по пути *modules/org/postgresql/main/module.xml*.
 
 ## **commands.cli**:
+
+Этот файл необходим для создания datasource на нашем сервере (wildfly) чтобы мы потом могли с помощью него подключиться к базе данных.
+
+> [!NOTE]
+>
+> Файл лежит в репозитории по пути customization/commands.cli
 
 В этой секции необходимо заменить драйвер по варианту, а именно все указанные переменные (driver-name, driver-module-name и т.д.).
 С этим вам сможет помочь интернет.
@@ -49,6 +55,9 @@
     password="${env.DB_PASSWORD}" \
 )
 ```
+## persistence.xml
+
+Пример этого конфига лежит в репозитории по пути *src/main/resources/META-INF/persistence.xml*. В нашем случае необходим для подключения к базе данных.
 
 ## docker-compose.yml
 
@@ -63,6 +72,20 @@ DB_PASSWORD=shkibidi
 DB_NAME=web3_db
 WAR_PATH=path_to_web_archive
 ```
+
+Если вы настроили все конфиги под себя и перенесли все необходимые файлы и каталоги:
+
+- customization
+- modules
+- web3.war, war-архив вашей лабы
+
+то вы можете запустить лабу командой `docker compose up`
+
+> [!NOTE]
+>
+> Чтобы каждый раз не ребилдить image сервера с целью задеплоить новую версию лабы, вы можете использовать wildfly maven plugin и его goal - wildfly:deploy. По умолчанию контейнер пробросит порт 9990 на локалхост.
+> Если вы захотите редеплоить лабу удаленно, в docker-compose можете изменить "9990:9990" на "0.0.0.0:9990:9990".
+> Редеплой - `mvn wildfly:deploy` (нужно заранее создать пользователя widfly - подключаетесь к контейнеру с помощью `docker exec -it web3 bash` и исполняете там `wildfly/bin/add-user.sh`).
 
 ## dockerfile
 
