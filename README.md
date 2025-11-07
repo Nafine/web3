@@ -93,9 +93,9 @@ WAR_PATH=path_to_web_archive
 
 ```bash
 docker build --build-args DATABASE_URL=db_url \
-        --build-arg DB_USERNAME=username \
-        --build-arg DB_PASSWORD=password \
-        --build-arg WAR_PATH=war_path \
+        --build-args DB_USERNAME=username \
+        --build-args DB_PASSWORD=password \
+        --build-args WAR_PATH=war_path \
         dockerfile_path
 ```
 
